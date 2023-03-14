@@ -292,10 +292,14 @@ def render():
     if errors:
         return jsonify({'errors': errors}, status=400)
 
+    do_not_convert = ['valueLabelsColor', 'majorGridLineColor', 'minorGridLineColor', 'bgcolor', 'fgcolor']
     # Fill in the graph_options
     for opt in graph_class.customizable:
         if opt in RequestParams:
             value = RequestParams[opt]
+            if opt in do_not_convert:
+                graph_options[opt] = value
+                continue
             try:
                 intvalue = int(value)
                 if str(intvalue) == str(value):
